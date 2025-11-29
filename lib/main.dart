@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
       home: SpleeshScreen(),
       routes: {
         JuzScreen.id:(context) => JuzScreen(),
-        Surahdetails.id:(context) => Surahdetails()
+        Surahdetails.id:(context) => Surahdetails(),
+
       },
     );
   }

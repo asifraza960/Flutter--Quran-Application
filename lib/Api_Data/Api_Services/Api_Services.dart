@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_projects1/Api_Data/Model/Ayah_of_TheDay.dart';
+import 'package:flutter_projects1/Api_Data/Model/Qari.dart';
 import 'package:flutter_projects1/Api_Data/Model/juz.dart';
 import 'package:http/http.dart' as http;
 import '../Model/Surah.dart';
@@ -24,8 +26,6 @@ class ApiServices {
       throw Exception("Failed to load post ");
     }
   }
-
-
   Future<SuraTranslationList> getTranslation(int index, int translationIndex) async {
 
     List<String> translations = [
@@ -55,10 +55,6 @@ class ApiServices {
 
 
 
-
-
-
-
   //  get Surah from Api
   Future<List<Surah>> getSurah() async {
     List<Surah> list = []; // Always start with an empty list
@@ -76,6 +72,8 @@ class ApiServices {
     }
   }
 
+
+
   //  get juzzz from APi
   Future<JuzModel> getJuzz(int index) async {
     String url = "http://api.alquran.cloud/v1/juz/$index/quran-uthmani";
@@ -91,9 +89,43 @@ class ApiServices {
   }
 
 
+  // Qari list Api
+  Future<List<Qari>> getQariList() async {
+    final url = "https://api.allorigins.win/raw?url=https://www.quranicaudio.com/api/qaris";
+    ;  // ✔ www mandatory
+    try {
+      final res = await http.get(Uri.parse(url));
+
+      print("STATUS CODE → ${res.statusCode}");
+      print("BODY → ${res.body}");
+
+      if (res.statusCode != 200) {
+        print("API ERROR → ${res.statusCode}");
+        throw Exception("Failed to load qari list");
+      }
+
+      List data = jsonDecode(res.body);
+      print("PARSED LENGTH → ${data.length}");
+
+      List<Qari> qariList = data.map((e) => Qari.fromjson(e)).take(20).toList();
+
+      qariList.sort((a, b) => a.name!.compareTo(b.name!));
+
+      return qariList;
+    } catch (e) {
+      print("EXCEPTION CAUGHT → $e");
+      rethrow;
+    }
+  }
+}
+
+
+
+
+
+
 
   random(min, max) {
     var rn = new Random();
     return min + rn.nextInt(max - min);
   }
-}

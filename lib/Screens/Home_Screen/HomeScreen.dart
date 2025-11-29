@@ -166,7 +166,6 @@ class _HomescreenState extends State<Homescreen> {
                           child: Column(
                             children: [
                               const Text(
-
                                 "Quran Ayah of the Day",
                                 style: TextStyle(fontWeight: FontWeight.bold,
                                 ),
