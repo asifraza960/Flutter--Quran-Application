@@ -4,7 +4,6 @@ import 'package:flutter_projects1/Constant/Constant.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 
 import '../../Api_Data/Model/Surah_translation.dart';
-import '../../CustomWidget/MultiTranslation.dart';
 import '../../CustomWidget/TanslationTile.dart';
 import '../../CustomWidget/country_name.dart';
 import '../../CustomWidget/translation_enum.dart';
@@ -63,38 +62,41 @@ class _SurahdetailsState extends State<Surahdetails> {
           headerBar: SizedBox(
             width: MediaQuery.of(context).size.width, // full screen width
             child: Container(
-              height: 50,
-              color: Colors.blue,
+              height: 30,
+              color: Constants.kPrimary,
               alignment: Alignment.center,
               child: Text(
                 "Swap me",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
-
           body: Container(
             width: double.infinity,
             color: Colors.white,
             height: MediaQuery.of(context).size.height * 0.25,
-            child: SingleChildScrollView(
-              child:Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: translationNames.entries.map((item) {
-                  return ChoiceChip(
-                    label: Text(item.value),
-                    selected: _translation == item.key,
-                    onSelected: (selected) {
-                      setState(() {
-                        _translation = item.key;
-                      });
-                    },
-                  );
-                }).toList(),
-              )
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child:Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: translationNames.entries.map((item) {
+                    return ChoiceChip(
+                      label: Text(item.value),
+                      selected: _translation == item.key,
+                      onSelected: (selected) {
+                        setState(() {
+                          _translation = item.key;
+                        });
+                      },
+                    );
+                  }).toList(),
+                )
 
 
+              ),
             ),
           ),
         ),

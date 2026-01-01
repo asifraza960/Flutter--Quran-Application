@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../../Constant/Constant.dart';
 import '../../Controller/loginController.dart';
 import '../../CustomWidget/Decoration.dart';
+import '../Home_Screen/Main_Screen.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -14,13 +13,13 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Stack(
                 children: [
@@ -51,63 +50,61 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ],
               ),
+
+              // Form
               Padding(
                 padding: const EdgeInsets.only(top: 38, left: 8, right: 8),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Form(
                       key: _loginController.formKey,
                       child: Column(
                         children: [
+                          // EMAIL
                           Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: TextFormField(
                               autocorrect: false,
                               keyboardType: TextInputType.emailAddress,
-                              // The validator receives the text that the user has entered.
-                              controller:
-                              _loginController.emailController,
-                              onSaved: (value) {
-                                _loginController.email = value!;
-                              },
-                              validator: (value) {
-                                return _loginController.validEmail(value!);
-                              },
-                              decoration: DecorationWidget(context, "Enter Email", Icons.email),
+                              controller: _loginController.emailController,
+                              validator: (value) =>
+                                  _loginController.validEmail(value!),
+                              decoration: DecorationWidget(
+                                context,
+                                "Enter Email",
+                                Icons.email,
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
+
+                          const SizedBox(height: 20),
+
+                          // PASSWORD
                           Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: TextFormField(
                               obscureText: true,
                               controller:
                               _loginController.passwordController,
-                              onSaved: (value) {
-                                _loginController.password = value!;
-                              },
-                              validator: (value) {
-                                return _loginController
-                                    .validPassword(value!);
-                              },
-                              decoration: DecorationWidget(context, "Enter Password", Icons.vpn_key),
+                              validator: (value) =>
+                                  _loginController.validPassword(value!),
+                              decoration: DecorationWidget(
+                                context,
+                                "Enter Password",
+                                Icons.vpn_key,
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
+
+                          const SizedBox(height: 20),
+
+                          // FORGOT PASSWORD
                           Container(
                             alignment: Alignment.centerRight,
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             height: 40,
                             child: TextButton(
-                              onPressed: () {
-                                //Get.toNamed('/forgetPassword');
-                              },
+                              onPressed: () {},
                               child: Text(
                                 'Forgot Password?',
                                 style: TextStyle(
@@ -116,6 +113,8 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+
+                          // LOGIN BUTTON
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(
@@ -123,29 +122,31 @@ class LoginScreen extends StatelessWidget {
                               height: 50,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.white, backgroundColor: Constants.kPrimary, elevation: 5,
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Constants.kPrimary,
+                                  elevation: 5,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30)),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 50, vertical: 10),
-                                  textStyle: const TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: 'CormorantGaramond'),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                 ),
-                                child: FittedBox(
-                                  child: Obx(
-                                        () => _loginController
-                                        .isLoading.value
-                                        ? Center(
-                                      child: CircularProgressIndicator(color: Colors.white,),
-                                    )
-                                        : Text(
-                                      'Login',
-                                    ),
+                                child: Obx(
+                                      () => _loginController.isLoading.value
+                                      ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                      : const Text(
+                                    'Login',
+                                    style: TextStyle(fontSize: 20),
                                   ),
                                 ),
                                 onPressed: () {
-                                  _loginController.login();
+                                  // _loginController.login();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MainScreen(),
+                                    ),
+                                  );
                                 },
                               ),
                             ),
@@ -156,17 +157,18 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
               ),
+
+              // Register Navigation
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  const Text('Don\'t have an account ? '),
+                  const Text("Don't have an account?"),
                   TextButton(
                     onPressed: () {
                       Get.offNamed('/register');
                     },
                     child: Text(
-                      'Register',
+                      "Register",
                       style: TextStyle(color: Constants.kPrimary),
                     ),
                   ),

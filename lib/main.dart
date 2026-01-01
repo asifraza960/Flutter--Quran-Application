@@ -1,12 +1,10 @@
 import 'dart:ui_web';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects1/Screens/Home_Screen/Main_Screen.dart';
 import 'package:flutter_projects1/Screens/Quran_Screen/SurahDetails.dart';
 import 'package:flutter_projects1/Screens/Quran_Screen/juz_screen.dart';
 import 'package:get/get.dart';
-
 import 'Screens/Fire_Base_Screens/Login_Screen.dart';
 import 'Screens/Fire_Base_Screens/registeration_screen.dart';
 import 'Screens/Spleesh_Screen/Spleesh_Screen.dart';
@@ -35,13 +33,13 @@ class MyApp extends StatelessWidget {
 
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),
-      home: SpleeshScreen(),
+      home: SplashScreen(),
       routes: {
         JuzScreen.id:(context) => JuzScreen(),
         Surahdetails.id:(context) => Surahdetails(),
       },
       getPages: [
-        GetPage(name: '/',  page: ()=> SpleeshScreen()),
+        GetPage(name: '/',  page: ()=> SplashScreen()),
     GetPage(name: '/login',  page:()=> LoginScreen()),
     GetPage( name: '/register',page: ()=> RegisterScreen()),
     GetPage( name: '/main',page: ()=> MainScreen()),

@@ -7,6 +7,7 @@ import 'package:flutter_projects1/Api_Data/Model/juz.dart';
 import 'package:http/http.dart' as http;
 import '../Model/Surah.dart';
 import '../Model/Surah_translation.dart';
+import '../Model/sajda.dart';
 
 class ApiServices {
   final endpointUrl = "http://api.alquran.cloud/v1/surah";
@@ -88,7 +89,17 @@ class ApiServices {
     }
   }
 
+  // Sajda
+  Future<SajdaList> getSajda() async {
+    String url =   "http://api.alquran.cloud/v1/sajda/en.asad";
+    final response = await http.get(Uri.parse(url));
 
+    if (response.statusCode == 200) {
+      return SajdaList.fromJSON(json.decode(response.body));
+    } else {
+      throw Exception("Failed  to Load Post");
+    }
+  }
   // Qari list Api
   Future<List<Qari>> getQariList() async {
     final url = "https://api.allorigins.win/raw?url=https://www.quranicaudio.com/api/qaris";

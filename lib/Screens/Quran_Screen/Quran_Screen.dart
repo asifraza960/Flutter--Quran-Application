@@ -4,7 +4,9 @@ import 'package:flutter_projects1/Constant/Constant.dart';
 import 'package:flutter_projects1/Screens/Quran_Screen/SurahDetails.dart';
 import 'package:flutter_projects1/Screens/Quran_Screen/juz_screen.dart';
 import '../../Api_Data/Model/Surah.dart';
-import '../../CustomWidget/CustomSutaListTile.dart'; // fixed name spelling
+import '../../Api_Data/Model/sajda.dart';
+import '../../CustomWidget/CustomSutaListTile.dart';
+import '../../CustomWidget/sajdaCustomTile.dart'; // fixed name spelling
 
 class QuranScreen extends StatefulWidget {
   const QuranScreen({super.key});
@@ -24,7 +26,10 @@ class _QuranScreenState extends State<QuranScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("Quran"),
+            title: const Text("Quran",style: TextStyle(
+              color: Colors.white
+            ),),
+            backgroundColor: Constants.kPrimary,
             centerTitle: true,
             bottom: const TabBar(
               tabs: [
@@ -81,8 +86,21 @@ class _QuranScreenState extends State<QuranScreen> {
                   }
                 },
               ),
-              const Center(
-                child: Text("It's rainy here"),
+             
+              FutureBuilder(
+                future: apiServices.getSajda(),
+                builder: (context,AsyncSnapshot<SajdaList> snapshot){
+                  if(snapshot.hasError){
+                    return Center(child: Text('Something went wrong'),);
+                  }
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return Center(child: CircularProgressIndicator(),);
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.sajdaAyahs.length,
+                    itemBuilder: (context , index) => SajdaCustomTile(snapshot.data!.sajdaAyahs[index], context),
+                  );
+                },
               ),
               GestureDetector(
                 child: Container(

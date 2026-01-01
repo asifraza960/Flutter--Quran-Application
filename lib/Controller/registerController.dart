@@ -27,7 +27,7 @@ class RegisterController extends GetxController {
 
   CollectionReference userDatBaseReference = FirebaseFirestore.instance
       .collection("user");
-  FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @override
   void dispose() {
@@ -89,32 +89,42 @@ class RegisterController extends GetxController {
       }
       isLoading.value = false;
     });
+
   }
 
   Future<UserCredential?> userRegister(String email, String password) async {
-    UserCredential? userCredential;
     try {
-      userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) async {
-            if (value != null) {
-              User? user = FirebaseAuth.instance.currentUser;
-              await user!.sendEmailVerification();
-              snackMessage('Check your Email');
-              saveDataToDb().then((value) async {
-                await FirebaseAuth.instance.currentUser!
-                    .sendEmailVerification();
-                Get.offAllNamed('/login');
-              });
-              return;
-            }
-          });
-    } on FirebaseAuthException catch (e) {
-      snackMessage('user already exist');
-    } catch (e) {}
+      // Create user
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
 
-    return userCredential;
+      User? user = FirebaseAuth.instance.currentUser;
+
+      // Send verification email only ONCE
+      await user!.sendEmailVerification();
+      snackMessage("Verification email sent! Check your inbox.");
+
+      // Save user info to firestore
+      await saveDataToDb();
+
+      // Redirect to login page
+      Get.offAllNamed('/login');
+
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "email-already-in-use") {
+        snackMessage("This email is already registered.");
+      } else if (e.code == "invalid-email") {
+        snackMessage("Invalid email.");
+      } else if (e.code == "weak-password") {
+        snackMessage("Password is too weak.");
+      } else {
+        snackMessage(e.message ?? "Unknown error");
+      }
+      return null;
+    }
   }
+
 
   Future<String?> uploadFile(filePath) async {
     File file = File(filePath);
